@@ -10,8 +10,8 @@ export interface IRepo<T> {
   findSingle(id: number): Promise<T | null>;
   findAll(): Promise<T[] | null>;
   uploadOne(arg: IReqBody): Promise<T | null>;
-  // updateOne(id: number): Promise<T>;
-  // deleteOne(id: number): Promise<T>;
+  updateOne(id: number, payload: IReqBody): Promise<T | null | void>;
+  deleteOne(id: number): Promise<T | null>;
 }
 //recall that interfaces are used to shape an object.
 

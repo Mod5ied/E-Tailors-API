@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { DeepPartial, Repository } from "typeorm";
 import { AppDataSource } from "../../data-source";
 import { Student } from "../entity/student.entity";
 import { IRepo, IReqBody } from "./interface.repo";
@@ -13,21 +13,26 @@ export class StudentsRepository implements IRepo<Student> {
     newStudent.age = body.age;
     newStudent.nin = body.nin;
 
-    const repository: Repository<Student> = AppDataSource.getRepository(Student)
-    await repository.save(newStudent)
-    return repository.findOneBy({id: newStudent.id})
+    const repository: Repository<Student> = AppDataSource.getRepository(Student);
+    await repository.insert(newStudent);
+    return repository.findOneBy({ id: newStudent.id });
   }
-  public async updateOne(): Promise<Student> {
-    throw new Error("Method not implemented.");
+  public async updateOne(id: number, payload: IReqBody) {
+    const repository: Repository<Student> = AppDataSource.getRepository(Student);
+    if (!payload) return console.log("Send a data");
+    await repository.update({ id: id }, { firstName: payload.firstName });
+    return repository.findOneBy({ id: id }); 
   }
-  public async deleteOne(): Promise<Student> {
+  public async deleteOne(id: number): Promise<Student> {
     throw new Error("Method not implemented.");
+    // const repository: Repository<Student> = AppDataSource.getRepository(Student);
+    // repository.remove()
   }
   public async findAll(): Promise<Student[]> {
     const repository: Repository<Student> = AppDataSource.getRepository(Student);
     return repository.find();
   }
-  public async findSingle(id: number) { //: Promise<Student | null>
+  public async findSingle(id: number) {
     const repository: Repository<Student> = AppDataSource.getRepository(Student);
     return repository.findOneBy({ id: id });
   }
