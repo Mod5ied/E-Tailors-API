@@ -1,3 +1,4 @@
+import { use } from "../../utils";
 import { Student } from "../entity/student.entity";
 import { StudentsController } from "../controllers";
 import { IRepo, StudentsRepository } from "../repositories";
@@ -8,24 +9,27 @@ const studentsRepo: IRepo<Student> = new StudentsRepository();
 const controller: StudentsController = new StudentsController(studentsRepo);
 
 //router here:
+/* This universal error handler - { use() } does well to catch all errors in the app from the root of our app, 
+   and efficiently sends them to tne error handlers, as well as logHandlers for proper and clean handling */
+
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
-  await controller.getAllStudents(req, res, next);
-  // console.log("I did it!")
+  use(await controller.getAllStudents(req, res, next));
 });
+
 router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
-  const id = req.params.id;
-  await controller.getOneStudent(req, res, next, id);
+  use(await controller.getOneStudent(req, res, next, req.params.id));
 });
+
 router.post("/", async (req: Request, res: Response, next: NextFunction) => {
-  await controller.uploadStudent(req, res, next);
+  use(await controller.uploadStudent(req, res, next));
 });
+
 router.patch("/:id", async (req: Request, res: Response, next: NextFunction) => {
-  const id = req.params.id;
-  await controller.updateStudent(req, res, next, id);
+  use(await controller.updateStudent(req, res, next, req.params.id));
 });
+
 router.delete("/:id", async (req: Request, res: Response, next: NextFunction) => {
-  const id = req.params.id;
-  await controller.deleteStudent(req, res, next, id);
+  use(await controller.deleteStudent(req, res, next, req.params.id));
 });
 
 export const studentsRouter: Router = router;

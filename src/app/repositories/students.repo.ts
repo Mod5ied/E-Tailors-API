@@ -17,14 +17,14 @@ export class StudentsRepository implements IRepo<Student> {
   }
   public async updateOne(id: number, payload: IReqBody) {
     const repository: Repository<Student> = AppDataSource.getRepository(Student);
-    if (!payload) return console.log("Send a data");
     await repository.update({ id: id }, { firstName: payload.firstName });
     return repository.findOneBy({ id: id });
   }
-  public async deleteOne(id: number): Promise<DeleteResult | void> {
+  public async deleteOne(id: number): Promise<DeleteResult | null> {
     const repository: Repository<Student> = AppDataSource.getRepository(Student);
-    if(!id) return console.log("Send an Id")
-    return repository.delete({ id: id });
+    const res = repository.delete({ id: id });
+    if((await res).affected === 0) return null
+    return res;
   }
   public async findAll(): Promise<Student[]> {
     const repository: Repository<Student> = AppDataSource.getRepository(Student);
