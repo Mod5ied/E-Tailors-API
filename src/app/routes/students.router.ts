@@ -23,5 +23,9 @@ router.patch("/:id", async (req: Request, res: Response, next: NextFunction) => 
   const id = req.params.id;
   await controller.updateStudent(req, res, next, id);
 });
+router.delete("/:id", async (req: Request, res: Response, next: NextFunction) => {
+  const id = req.params.id;
+  await controller.deleteStudent(req, res, next, id);
+});
 
 export const studentsRouter: Router = router;

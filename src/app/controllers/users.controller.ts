@@ -13,14 +13,14 @@ export class StudentsController {
     return this._repository
       .findAll()
       .then((student: any) => res.status(200).send(student))
-      .catch((error: any) => res.status(400).send({ error: error }));
+      .catch((error: any) => res.status(400).send({ error: error.message }));
     //errors can be send to a logger from here.
   }
   public async getOneStudent(req: Request, res: Response, next: NextFunction, id: any): Promise<any> {
     return this._repository
       .findSingle(id)
       .then((student: any) => res.status(200).send(student))
-      .catch((error: any) => res.status(200).send({ error: error }));
+      .catch((error: any) => res.status(200).send({ error: error.message }));
     //errors can be send to a logger from here.
   }
   public async uploadStudent(req: Request, res: Response, next: NextFunction): Promise<any> {
@@ -35,6 +35,12 @@ export class StudentsController {
     return this._repository
       .updateOne(id, body)
       .then((student) => res.status(200).send(student))
+      .catch((error) => res.status(400).send({ error: error.message }));
+  }
+  public async deleteStudent(req: Request, res: Response, next: NextFunction, id: any): Promise<any> {
+    return this._repository
+      .deleteOne(id)
+      .then((resp) => res.status(200).send(resp))
       .catch((error) => res.status(400).send({ error: error.message }));
   }
 }

@@ -1,3 +1,5 @@
+import { DeleteResult } from "typeorm";
+
 export interface IReqBody {
   id: number;
   firstName: string;
@@ -11,7 +13,7 @@ export interface IRepo<T> {
   findAll(): Promise<T[] | null>;
   uploadOne(arg: IReqBody): Promise<T | null>;
   updateOne(id: number, payload: IReqBody): Promise<T | null | void>;
-  deleteOne(id: number): Promise<T | null>;
+  deleteOne(id: number): Promise<T | void | DeleteResult>;
 }
 //recall that interfaces are used to shape an object.
 
