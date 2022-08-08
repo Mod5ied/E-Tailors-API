@@ -3,12 +3,12 @@ import { errCodeT, errStatusT } from "./type.error";
 export class HttpException extends Error {
   code: errCodeT;
   message: errStatusT;
-  logMessage?: errStatusT | null;
+  logData?: errStatusT | null | void;
 
-  constructor(code: errCodeT, message: errStatusT, logMessage?: errStatusT | null) {
+  constructor(code: errCodeT, message: errStatusT, logData?: errStatusT | null | void) {
     super(message);
     this.code = code;
     this.message = message;
-    this.logMessage = logMessage;
+    this.logData = logData;
   }
 }

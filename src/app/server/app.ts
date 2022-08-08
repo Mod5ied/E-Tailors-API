@@ -1,9 +1,9 @@
-import { appRouter } from "../routes/app.router";
+import logger from "../../utils/log/logConfig";
 import express, { Express } from "express";
 import { errorHandler } from "../../utils";
+import { appRouter } from "../routes/app.router";
 import * as dotenv from "dotenv";
 import helmet from "helmet";
-import pino from "pino";
 import cors from "cors";
 dotenv.config();
 
@@ -28,8 +28,8 @@ export class Application {
     const port: number = this._server.get("port");
     const host: string = this._server.get("host");
 
-    this._server.listen(port, host, () => {
-      console.log(`Everytin soft at http:${host}:${port}`);
+    this._server.listen(port, host, async () => {
+      logger.info(`Connected and running at ${host}:${port}`);
     });
   }
 }

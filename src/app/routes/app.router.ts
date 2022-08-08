@@ -1,5 +1,5 @@
-import express, { Router } from "express";
 import { use } from "../../utils";
+import express, { Router } from "express";
 import { saveLogs } from "../../utils/log/logHandler";
 import { studentsRouter } from "./students.router";
 

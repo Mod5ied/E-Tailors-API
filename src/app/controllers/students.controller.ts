@@ -11,61 +11,40 @@ export class StudentsController {
   }
 
   public async getAllStudents(req: Request, res: Response, next: NextFunction): Promise<any> {
-    return this._repository
-      .findAll()
-      .then((student: any) => {
-        // its vital to log a newly created resource, should an operation fail then this would be a gold-mine.
-        if (!student) return next(new HttpException(404, "No data was found", student));
-        return res.status(200).send(student);
-      })
-      .catch((error: any) => {
-        next(new HttpException(404, `${error.message}`, (res.locals.data = error.message)));
-      });
+    const students = await this._repository.findAll();
+    if (!students) return next(new HttpException(404, "No data was found", (res.locals.data = students)));
+    return res.status(200).send(students);
+    
   }
 
   public async getOneStudent(req: Request, res: Response, next: NextFunction, id: any): Promise<any> {
-    return this._repository
-      .findSingle(id)
-      .then((student: any) => {
-        if (!student)
-          return next(new HttpException(404, "No user with that id", (res.locals.data = student)));
-        return res.status(200).send(student);
-      })
-      .catch((error: any) => next(new HttpException(404, `${error.message}`, error)));
+    const student = await this._repository.findSingle(id);
+    if (!student) return next(new HttpException(404, "No user with that id", (res.locals.data = student)));
+    return (res.locals.data = student), res.status(200).send(student), next();
+
   }
 
   public async uploadStudent(req: Request, res: Response, next: NextFunction): Promise<any> {
     const body: IReqBody = req.body;
-    return this._repository
-      .uploadOne(body)
-      .then((student) => {
-        (res.locals.data = student), res.status(200).send(student);
-        next();
-      })
-      .catch((error: any) => next(new HttpException(404, `${error.message}`, error)));
+    const student = await this._repository.uploadOne(body);
+    if (!student) return next(new HttpException(400, `${student}`, student));
+    return (res.locals.data = student), res.status(200).send(student), next();
+
   }
 
   public async updateStudent(req: Request, res: Response, next: NextFunction, id: any): Promise<any> {
     const body: IReqBody = req.body;
-    return this._repository
-      .updateOne(id, body)
-      .then((student) => {
-        if (!student) return next(new HttpException(400, `${student}`));
-        (res.locals.data = student), res.status(200).send(student);
-        next();
-      })
-      .catch((error: any) => next(new HttpException(404, `${error.message}`, error)));
+    const student = await this._repository.updateOne(id, body);
+    if (!student) return next(new HttpException(400, `${student}`, student));
+    return (res.locals.data = student), res.status(200).send(student), next();
+  
   }
 
   public async deleteStudent(req: Request, res: Response, next: NextFunction, id: any): Promise<any> {
-    return this._repository
-      .deleteOne(id)
-      .then((resp) => {
-        if (!resp) return next(new HttpException(400, `No student with such id`, resp));
-        //todo: improve on the response message.
-        (res.locals.data = resp), res.status(200).send(resp);
-        next();
-      })
-      .catch((error) => next(new HttpException(404, `${error.message}`, error)));
+    const resp = await this._repository.deleteOne(id);
+    if (!resp) return next(new HttpException(400, `No student with such id`, resp));
+    //todo: improve on the response message.
+    return (res.locals.data = resp), res.status(200).send(resp), next();
+
   }
 }

@@ -1,4 +1,3 @@
-import { use } from "../../utils";
 import { Student } from "../entity/student.entity";
 import { StudentsController } from "../controllers";
 import { IRepo, StudentsRepository } from "../repositories";
@@ -13,23 +12,23 @@ const controller: StudentsController = new StudentsController(studentsRepo);
    and efficiently sends them to tne error handlers, as well as logHandlers for proper and clean handling */
 
 router.get("/", async (req: Request, res: Response, next: NextFunction) => {
-  use(await controller.getAllStudents(req, res, next));
+  await controller.getAllStudents(req, res, next);
 });
 
 router.get("/:id", async (req: Request, res: Response, next: NextFunction) => {
-  use(await controller.getOneStudent(req, res, next, req.params.id));
+  await controller.getOneStudent(req, res, next, req.params.id);
 });
 
 router.post("/", async (req: Request, res: Response, next: NextFunction) => {
-  use(await controller.uploadStudent(req, res, next));
+  await controller.uploadStudent(req, res, next);
 });
 
-router.patch("/:id", async (req: Request, res: Response, next: NextFunction) => {
-  use(await controller.updateStudent(req, res, next, req.params.id));
+router.put("/:id", async (req: Request, res: Response, next: NextFunction) => {
+  await controller.updateStudent(req, res, next, req.params.id);
 });
 
 router.delete("/:id", async (req: Request, res: Response, next: NextFunction) => {
-  use(await controller.deleteStudent(req, res, next, req.params.id));
+  await controller.deleteStudent(req, res, next, req.params.id);
 });
 
 export const studentsRouter: Router = router;
